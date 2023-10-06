@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
+        <css src="Magefan_ShopifyBlogExport::css/export.css"/>
+    </head>
+    <update handle="editor"/>
+    <body>
+        <referenceContainer name="content">
+            <container name="mfshopifyblog.export.items" htmlTag="div" htmlClass="mfshopifyblog-exports" >
+                <block name="mfshopifyblog.export.magefan" template="Magefan_ShopifyBlogExport::export/item.phtml">
+                    <arguments>
+                        <argument name="export_type" xsi:type="string">magefan</argument>
+                        <argument name="label" xsi:type="string">Export from Magefan</argument>
+                        <argument name="image" xsi:type="string">Magefan_ShopifyBlogExport::images/magefan.png</argument>
+                    </arguments>
+                </block>
+                <block name="mfshopifyblog.export.mageplaza" template="Magefan_ShopifyBlogExport::export/item.phtml">
+                    <arguments>
+                        <argument name="export_type" xsi:type="string">mageplaza</argument>
+                        <argument name="label" xsi:type="string">Export from Mageplaza</argument>
+                        <argument name="image" xsi:type="string">Magefan_ShopifyBlogExport::images/mageplaza_m2.png</argument>
+                    </arguments>
+                </block>
+                <block name="mfshopifyblog.export.mirasvit" template="Magefan_ShopifyBlogExport::export/item.phtml">
+                    <arguments>
+                        <argument name="export_type" xsi:type="string">mirasvit</argument>
+                        <argument name="label" xsi:type="string">Export from Mirasvit</argument>
+                        <argument name="image" xsi:type="string">Magefan_ShopifyBlogExport::images/mirasvit.png</argument>
+                    </arguments>
+                </block>
+            </container>
+        </referenceContainer>
+    </body>
+</page>

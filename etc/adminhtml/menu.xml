@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Magefan_ShopifyBlogExport::elements" title="Shopify Blog" module="Magefan_ShopifyBlogExport" parent="Magento_Backend::content" sortOrder="10"  resource="Magefan_ShopifyBlogExport::elements"/>
+        <add id="Magefan_ShopifyBlogExport::export" title="Export" module="Magefan_ShopifyBlogExport" parent="Magefan_ShopifyBlogExport::elements" sortOrder="40" action="shopifyblogexport/export" resource="Magefan_ShopifyBlogExport::export"/>
+    </menu>
+</config>

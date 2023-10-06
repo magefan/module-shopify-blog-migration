@@ -1,0 +1,16 @@
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+
+.mfshopifyblog-exports {width:100%;}
+.mfshopifyblog-exports .item {width:16%; display: inline-block;min-width: 270px;}
+.mfshopifyblog-exports .item {text-align: center; margin:0px; padding:0px;}
+.mfshopifyblog-exports .item .itm-hld  {margin: 10px; padding: 20px; background: #373330; cursor: pointer;}
+.mfshopifyblog-exports .item .itm-hld:hover {background:#524D49; }
+.mfshopifyblog-exports .item .img {width:200px; height:200px; max-width: 200px; margin:5px;}
+.mfshopifyblog-exports .item .more {background: #AAA6A0; color: white; padding-top: 30px; font-weight: 700;}
+.mfshopifyblog-exports .item .lable {font-weight: 700; font-size:16px; color: #F7F3EB;}
+

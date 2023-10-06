@@ -1,0 +1,172 @@
+<?php
+/**
+ * @var $block \Magefan\ShopifyBlogExport\Block\Adminhtml\Export\Exporter
+ */
+?>
+
+<style>
+    #myProgress {
+        width: 100%;
+        background-color: grey;
+    }
+
+    #myBar {
+        width: 0%;
+        height: 30px;
+        background-color: green;
+    }
+</style>
+
+<div id="myProgress">
+    <div id="myBar"></div>
+</div>
+
+<script>
+    require(["jquery", "domReady!"], function ($) {
+        var dataExtractorUrl = '<?= $block->getUrl('shopifyblogexport/export/dataExtractor',[
+                'type' => $block->getType()
+            ]) ?>';
+
+        var pushDataToShopify = '<?= $block->getUrl('shopifyblogexport/export/pusher') ?>';
+
+        var shopifyUrl = '<?= 'https://' . $block->getShopifyDomain() . '.myshopify.com' . '/a/blog/import' ?>';
+        var importKey = '<?=$block->getImportKey()?>';
+        var exporterKey = '<?=$block->getExporterKey()?>';
+        var closedConnection = false;
+
+        var indexPageUrl = '<?=$block->getUrl('shopifyblogexport/export')?>';
+
+        var setGetParameters = function (urlStr, getParameters) {
+            var url = new URL(urlStr);
+            var search_params = url.searchParams;
+            for (var key in getParameters) {
+                search_params.set(key, getParameters[key]);
+            }
+            url.search = search_params.toString();
+            return url.toString();
+        };
+
+        const entities = {1: "category", 2: "tag", 3: "post", 4: 'comment', 5: "media_post"};
+        var entityIndex = 1;
+        var entityIds = {};
+        var entityIdsMax = 0;
+
+        var extractEntityIdsPromises = [];
+        for (var key in entities) {
+            entityIdsExtractor = setGetParameters(dataExtractorUrl, {'entity': entities[key], 'allIds': true });
+            var extractEntityIdsPromise = $.ajax({
+                    url: entityIdsExtractor,
+                    type: 'GET',
+                    success: function (data) {
+                        if (0 != data.length) {
+                            data['entity'] = entities[key];
+                            entityIds[entities[key]] = data;
+                            entityIdsMax += data.length;
+                        }
+                    },
+                    error: function() {
+                        console.log('error yoy');
+                    }
+            });
+
+            extractEntityIdsPromises.push(extractEntityIdsPromise);
+        }
+
+        $.when.apply(null, extractEntityIdsPromises).done(function(){
+            alert('Data extraction phase is completed,press ok to go to pushing data to shopify');
+
+            if (entityIdsMax) {
+                var offset = 1;
+                var step = (1 / entityIdsMax) * 100;
+                var width = step;
+                var maxWidth = step*entityIdsMax;
+
+                dataExtractorUrl = setGetParameters(dataExtractorUrl, {
+                    'entity': entities[entityIndex],
+                    'offset': offset
+                });
+
+                var runRequests = function() {
+                    if (!(entityIndex in entities)) {
+                        console.log("runRequests Success");
+                        if (false === closedConnection) {
+                            var data = {
+                                0: {
+                                    exporterKey: exporterKey,
+                                    importKey: importKey,
+                                    closeConnection: true
+                                }
+                            };
+
+                            $.ajax({
+                                url: pushDataToShopify,
+                                type: 'POST',
+                                data: {
+                                    'data': JSON.stringify(data),
+                                    'shopifyUrl': shopifyUrl,
+                                    'entity': 'closeConnection'
+                                },
+                                dataType: 'json',
+                                success: function (data) {
+                                    closedConnection = true;
+                                    alert('All data was succefully exported');
+                                    window.location.href = indexPageUrl;
+                                },
+                                error: function () {
+                                    alert('That was some error while pushing data');
+                                    window.location.href = indexPageUrl;
+                                }
+                            });
+                        }
+                        return;
+                    }
+
+                    $.ajax({
+                        url: dataExtractorUrl,
+                        type: 'GET',
+                        success: function (data) {
+                            if (0 == data.length) {
+                                entityIndex += 1;
+                                offset = 1;
+                                dataExtractorUrl = setGetParameters(dataExtractorUrl, {'entity': entities[entityIndex], 'offset': offset});
+                                runRequests();
+                            }
+
+                            else {
+                                data[0]['exporterKey'] = exporterKey;
+                                data[0]['importKey'] = importKey;
+
+                                $.ajax({
+                                    url: pushDataToShopify,
+                                    type: 'POST',
+                                    data: {'data': JSON.stringify(data), 'shopifyUrl': shopifyUrl, 'entity': entities[entityIndex]},
+                                    dataType: 'json',
+                                    success: function (dataa) {
+                                        console.log(data);
+                                        if (maxWidth >= width) {
+                                            document.getElementById("myBar").style.width = width + "%";
+                                            width += step;
+                                        }
+                                        offset += 1;
+                                        dataExtractorUrl = setGetParameters(dataExtractorUrl, {'offset': offset});
+                                        runRequests();
+                                    },
+                                    error: function () {
+                                        alert('That was some error while pushing data');
+                                        window.location.href = indexPageUrl;
+                                    }
+                                });
+                            }
+                        },
+                        error: function() {
+                            alert('That was some error while pushing data');
+                            window.location.href = indexPageUrl;
+                        },
+                    });
+                };
+                runRequests();
+            }
+        })
+
+    });
+</script>

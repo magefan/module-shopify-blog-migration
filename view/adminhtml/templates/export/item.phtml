@@ -1,0 +1,37 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ *
+ * Glory to Ukraine! Glory to the heroes!
+ */
+?>
+<?php
+/**
+ * ShopifyBlog export item template
+ *
+ * @var $block \Magento\Backend\Block\Template
+ */
+?>
+
+<div class="item">
+    <div class="itm-hld"
+        <?php
+
+        if ($block->getExportUrl() && !$block->getExportType()) {
+            $action = 'window.open(\'' . $block->escapeUrl($block->getExportUrl()) . '\')';
+        } else {
+            if ($block->getExportPath()) {
+                $url = $block->getUrl($block->getExportPath());
+            } else {
+                $url = $block->getUrl('shopifyblogexport/export/form', ['type' => $block->getExportType()]);
+            }
+            $action = 'window.location=\'' .  $block->escapeUrl($url) . '\'';
+        } ?>
+         onclick="<?= $action ?>">
+        <img class="img"
+             src="<?= $block->escapeUrl($block->getViewFileUrl($block->getImage())) ?>" />
+        <br/>
+        <span class="lable"><?= $block->escapeHtml(__($block->getLabel())) ?><br/><br/></span>
+    </div>
+</div>
