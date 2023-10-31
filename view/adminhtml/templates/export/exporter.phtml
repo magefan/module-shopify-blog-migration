@@ -29,7 +29,7 @@
 
         var pushDataToShopify = '<?= $block->getUrl('shopifyblogexport/export/pusher') ?>';
 
-        var shopifyUrl = '<?= 'https://' . $block->getShopifyDomain() . '.myshopify.com' . '/a/blog/import' ?>';
+        var shopifyUrl = '<?= 'https://' . $block->getShopifyDomain() . '/a/blog/import' ?>';
         var importKey = '<?=$block->getImportKey()?>';
         var exporterKey = '<?=$block->getExporterKey()?>';
         var closedConnection = false;
@@ -142,7 +142,6 @@
                                     data: {'data': JSON.stringify(data), 'shopifyUrl': shopifyUrl, 'entity': entities[entityIndex]},
                                     dataType: 'json',
                                     success: function (dataa) {
-                                        console.log(data);
                                         if (maxWidth >= width) {
                                             document.getElementById("myBar").style.width = width + "%";
                                             width += step;
@@ -152,8 +151,20 @@
                                         runRequests();
                                     },
                                     error: function () {
-                                        alert('That was some error while pushing data');
-                                        window.location.href = indexPageUrl;
+                                        if (entities[entityIndex] == 'media_post')
+                                        {
+                                            if (maxWidth >= width) {
+                                                document.getElementById("myBar").style.width = width + "%";
+                                                width += step;
+                                            }
+                                            offset += 1;
+                                            dataExtractorUrl = setGetParameters(dataExtractorUrl, {'offset': offset});
+                                            runRequests()
+                                        }
+                                        else {
+                                            alert('That was some error while pushing data 222');
+                                            window.location.href = indexPageUrl;
+                                        }
                                     }
                                 });
                             }
