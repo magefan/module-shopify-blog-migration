@@ -16,13 +16,6 @@ class Exporter extends \Magento\Backend\Block\Template
     /**
      * @return string
      */
-    public function getShopifyDomain(): string {
-        return (string)$this->getRequest()->getParam('shopify_domain');
-    }
-
-    /**
-     * @return string
-     */
     public function getImportKey(): string {
         return (string)$this->getRequest()->getParam('shopify_import_key');
     }

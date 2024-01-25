@@ -89,19 +89,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $fieldset->addField(
-            'shopify_domain',
-            'text',
-            [
-                'label' => __('Shopify Store Name'),
-                'title' => __('Shopify Store Name'),
-                'name' => 'shopify_domain',
-                'required' => true,
-                'disabled' => $isElementDisabled,
-                'after_element_html' => '<small>E.g. mystore.myshopify.com</small>',
-            ]
-        );
-
         /**
          * Check is single store mode
         if (!in_array($type, ['aw', 'aw2', 'mageplaza', 'mageplaza1', 'mirasvit'])) {
