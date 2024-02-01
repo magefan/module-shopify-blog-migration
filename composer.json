@@ -2,9 +2,9 @@
     "name": "magefan/module-shopify-blog-migration",
     "description": "Magefan_ShopifyBlogExport",
     "type": "magento2-module",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "require": {
-        "magefan/module-community" : ">=2.1.17"
+        "magefan/module-community" : ">=2.1.18"
     },
     "autoload": {
         "files": [
