@@ -17,6 +17,12 @@ class ShopifyPusher
                 throw new \Exception(curl_error($ch), curl_errno($ch));
             }
 
+            if (200 != curl_getinfo($ch, CURLINFO_HTTP_CODE)) {
+                return json_encode([
+                    'errorMessage' => 'Wrong Import Key',
+                ]);
+            }
+
             return $result;
 
         }
