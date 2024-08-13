@@ -18,9 +18,9 @@ class Mirasvit extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
         $connection = $this->getConnection();
 
         $select = $connection->select()
-             ->from(
-                 ['ce' => $this->resourceConnection->getTableName('mst_blog_category_entity')],
-                 ['old_id' => 'entity_id', 'position', 'path' => 'parent_id'])->limitPage($offset,self::ENTITIES_PER_PAGE);
+            ->from(
+                ['ce' => $this->resourceConnection->getTableName('mst_blog_category_entity')],
+                ['old_id' => 'entity_id', 'position', 'path' => 'parent_id'])->limitPage($offset,self::ENTITIES_PER_PAGE);
         try {
             $result = $connection->fetchAll($select);
         } catch (\Exception $e) {
@@ -168,7 +168,8 @@ class Mirasvit extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
             }
 
             $data['tags'] = $postTags;
-
+            $data['content'] = $this->filterProvider->getPageFilter()->filter($data['content']);
+            $data['short_content'] = $this->filterProvider->getPageFilter()->filter($data['short_content']);
             $answer[] = $data;
         }
 
@@ -275,7 +276,7 @@ class Mirasvit extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
             $select = $connection->select()
                 ->from(
                     ['ce' => $this->resourceConnection->getTableName('eav_attribute')])
-                    ->where('entity_type_id =?',$entityTypeId);
+                ->where('entity_type_id =?',$entityTypeId);
             $result = $connection->fetchAll($select);
 
             foreach ($result as $data) {
@@ -293,9 +294,9 @@ class Mirasvit extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
             ->from(
                 ['ce' => $this->resourceConnection->getTableName('mst_' . $entitytTypeCode . '_entity_' . $attribute['backend_type'])],
                 ['value'])
-                ->where('store_id =?',0)
-                ->where('attribute_id =?', $attribute['attribute_id'])
-                ->where('entity_id =?', $entitytId);
+            ->where('store_id =?',0)
+            ->where('attribute_id =?', $attribute['attribute_id'])
+            ->where('entity_id =?', $entitytId);
 
         $result = $connection->fetchAll($select);
 

@@ -11,18 +11,18 @@ class Mageplaza extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
         $select = $connection->select()
             ->from(
                 ['ce' => $this->resourceConnection->getTableName('mageplaza_blog_category')],
-            [
-                'old_id' => 'category_id',
-                'title' => 'name',
-                'identifier' => 'url_key',
-                'position' => 'position',
-                'meta_title' => 'meta_title',
-                'meta_keywords' => 'meta_keywords',
-                'meta_description' => 'meta_description',
-                'content' => 'description',
-                'path' => 'parent_id',
-                'is_active' => 'enabled',
-            ])
+                [
+                    'old_id' => 'category_id',
+                    'title' => 'name',
+                    'identifier' => 'url_key',
+                    'position' => 'position',
+                    'meta_title' => 'meta_title',
+                    'meta_keywords' => 'meta_keywords',
+                    'meta_description' => 'meta_description',
+                    'content' => 'description',
+                    'path' => 'parent_id',
+                    'is_active' => 'enabled',
+                ])
             ->order('path ASC')
             ->limitPage($offset,self::ENTITIES_PER_PAGE);
 
@@ -48,14 +48,14 @@ class Mageplaza extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
             ->from(
                 ['ce' => $this->resourceConnection->getTableName('mageplaza_blog_tag')],
                 [
-                   'old_id' => 'tag_id',
-                   'title' => 'name',
-                   'identifier' => 'url_key',
-                   'content' => 'description',
-                   'meta_title' => 'meta_title',
-                   'meta_description' => 'meta_description',
-                   'meta_keywords' => 'meta_keywords',
-                   'is_active' => 'enabled'
+                    'old_id' => 'tag_id',
+                    'title' => 'name',
+                    'identifier' => 'url_key',
+                    'content' => 'description',
+                    'meta_title' => 'meta_title',
+                    'meta_description' => 'meta_description',
+                    'meta_keywords' => 'meta_keywords',
+                    'is_active' => 'enabled'
                 ])
             ->limitPage($offset,self::ENTITIES_PER_PAGE);
 
@@ -117,6 +117,8 @@ class Mageplaza extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
             }
 
             $result[$key]['tags'] = $postTags;
+            $result[$key]['content'] = $this->filterProvider->getPageFilter()->filter($result[$key]['content']);
+            $result[$key]['short_content'] = $this->filterProvider->getPageFilter()->filter($result[$key]['short_content']);
         }
 
         return $this->mvColumns($result,
