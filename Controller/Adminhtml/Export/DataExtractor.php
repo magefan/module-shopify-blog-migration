@@ -43,7 +43,7 @@ class DataExtractor extends \Magento\Backend\App\Action
                     else {
                         $preparedData = $export->getCategories((int)$data['offset']);
                     }
-                break;
+                    break;
                 case 'tag':
                     if (isset($data['allIds'])) {
                         $preparedData = $export->getTagIds();
@@ -51,7 +51,7 @@ class DataExtractor extends \Magento\Backend\App\Action
                     else {
                         $preparedData = $export->getTags((int)$data['offset']);
                     }
-                break;
+                    break;
                 case 'post':
                     if (isset($data['allIds'])) {
                         $preparedData = $export->getPostIds();
@@ -59,13 +59,23 @@ class DataExtractor extends \Magento\Backend\App\Action
                     else {
                         $preparedData = $export->getPosts((int)$data['offset']);
                     }
-                break;
+                    break;
                 case 'comment':
                     if (isset($data['allIds'])) {
                         $preparedData = $export->getCommentIds();
                     }
                     else {
                         $preparedData = $export->getComments((int)$data['offset']);
+                    }
+                    break;
+                case 'author':
+                    if (method_exists($export,'getAuthorIds') && method_exists($export,'getAuthors')) {
+                        if (isset($data['allIds'])) {
+                            $preparedData = $export->getAuthorIds();
+                        }
+                        else {
+                            $preparedData = $export->getAuthors((int)$data['offset']);
+                        }
                     }
                     break;
                 case 'media_post':
@@ -75,7 +85,7 @@ class DataExtractor extends \Magento\Backend\App\Action
                     else {
                         $preparedData = $export->getPostMediaPaths((int)$data['offset']);
                     }
-                break;
+                    break;
             }
 
             $resultJson = $this->resultJsonFactory->create();

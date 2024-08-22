@@ -24,8 +24,8 @@
 <script>
     require(["jquery", "domReady!"], function ($) {
         var dataExtractorUrl = '<?= $block->getUrl('shopifyblogexport/export/dataExtractor',[
-                'type' => $block->getType()
-            ]) ?>';
+            'type' => $block->getType()
+        ]) ?>';
 
         var pushDataToShopify = '<?= $block->getUrl('shopifyblogexport/export/pusher') ?>';
 
@@ -46,7 +46,7 @@
             return url.toString();
         };
 
-        const entities = {1: "category", 2: "tag", 3: "post", 4: 'comment', 5: "media_post"};
+        const entities = {1: "category", 2: "tag", 3: "author", 4: "post", 5: 'comment', 6: "media_post"};
         var entityIndex = 1;
         var entityIds = {};
         var entityIdsMax = 0;
@@ -55,18 +55,18 @@
         for (var key in entities) {
             entityIdsExtractor = setGetParameters(dataExtractorUrl, {'entity': entities[key], 'allIds': true });
             var extractEntityIdsPromise = $.ajax({
-                    url: entityIdsExtractor,
-                    type: 'GET',
-                    success: function (data) {
-                        if (0 != data.length) {
-                            data['entity'] = entities[key];
-                            entityIds[entities[key]] = data;
-                            entityIdsMax += data.length;
-                        }
-                    },
-                    error: function() {
-                        console.log('error yoy');
+                url: entityIdsExtractor,
+                type: 'GET',
+                success: function (data) {
+                    if (0 != data.length) {
+                        data['entity'] = entities[key];
+                        entityIds[entities[key]] = data;
+                        entityIdsMax += data.length;
                     }
+                },
+                error: function() {
+                    console.log('error yoy');
+                }
             });
 
             extractEntityIdsPromises.push(extractEntityIdsPromise);

@@ -95,7 +95,10 @@ class Magefan extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
             }
 
             $result[$key]['tags'] = $postTags;
+            $result[$key]['content'] = $this->filterProvider->getPageFilter()->filter($result[$key]['content']);
+            $result[$key]['short_content'] = $this->filterProvider->getPageFilter()->filter($result[$key]['short_content']);
         }
+
 
         return $this->mvColumns($result, ['post_id' => 'old_id', 'mf_exclude_xml_sitemap' => 'exclude_xml_sitemap']);
     }
@@ -103,6 +106,39 @@ class Magefan extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
     public function getPostIds(): array
     {
         return $this->getEntityIds('magefan_blog_post', 'post_id');
+    }
+
+    public function getAuthorIds(): array
+    {
+        if ($this->getConnection()->isTableExists($this->resourceConnection->getTableName('magefan_blog_author'))) {
+            return $this->getEntityIds('magefan_blog_author', 'author_id');
+        } else {
+            return $this->getEntityIds('admin_user', 'user_id');
+        }
+    }
+
+    public function getAuthors(int $offset): array
+    {
+        if ($this->getConnection()->isTableExists($this->resourceConnection->getTableName('magefan_blog_author'))) {
+            $tableName = $this->resourceConnection->getTableName('magefan_blog_author');
+        } else {
+            $tableName = $this->resourceConnection->getTableName('admin_user');
+        }
+
+        $connection = $this->getConnection();
+
+        $select = $connection->select()
+            ->from(
+                ['ce' => $this->resourceConnection->getTableName($tableName)])
+            ->limitPage($offset,self::ENTITIES_PER_PAGE);
+
+        try {
+            $result = $connection->fetchAll($select);
+        } catch (\Exception $e) {
+            throw new \Exception(__('Magefan Blog Extension not detected.'), 1);
+        }
+
+        return $this->mvColumns($result, ['author_id' => 'old_id', 'user_id' => 'old_id']);
     }
 
     public function getComments(int $offset): array
@@ -133,7 +169,7 @@ class Magefan extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
             ->from(
                 ['ce' => $this->resourceConnection->getTableName('magefan_blog_post')],
                 ['old_id' => 'post_id','featured_img'])
-        ->where('featured_img IS NOT NULL');
+            ->where('featured_img IS NOT NULL');
 
         if (null !== $offset) {
             $select->limitPage($offset, self::ENTITIES_PER_PAGE);

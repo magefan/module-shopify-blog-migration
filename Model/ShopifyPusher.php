@@ -6,10 +6,21 @@ class ShopifyPusher
 {
     protected $curl;
 
+    protected $storeManager;
+
+    public function __construct(
+        \Magento\Store\Model\StoreManagerInterface $storeManager
+    )
+    {
+        $this->storeManager = $storeManager;
+    }
+
     public function execute(string $url, string $data, string $entity) {
+        $parsedUrl = parse_url($this->storeManager->getStore()->getBaseUrl());
+
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt($ch, CURLOPT_POSTFIELDS, ['data' => $data, 'entity' => $entity]);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, ['data' => $data, 'entity' => $entity, 'importerDomain' => $parsedUrl['host']]);
 
         try {
             $result = curl_exec($ch);
