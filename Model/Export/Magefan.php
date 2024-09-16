@@ -186,8 +186,7 @@ class Magefan extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
                 $elems = explode('/', $item['featured_img']);
                 $featuredImg = end($elems);
 
-                $mediaPath = $this->findFullMediaPaths->execute(['featured_img' => $featuredImg],
-                    '/magefan_blog')[0] ?? 0;
+                $mediaPath = $this->findFullMediaPaths->execute(['featured_img' => $featuredImg])[0] ?? 0;
 
                 if ($mediaPath) {
                     $result[$key]['featured_img'] = $mediaPath;
