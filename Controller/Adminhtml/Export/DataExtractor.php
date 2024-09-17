@@ -4,6 +4,9 @@ namespace Magefan\ShopifyBlogExport\Controller\Adminhtml\Export;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Store\Model\App\Emulation;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Area;
 
 class DataExtractor extends \Magento\Backend\App\Action
 {
@@ -12,13 +15,33 @@ class DataExtractor extends \Magento\Backend\App\Action
      */
     private $resultJsonFactory;
 
+    /**
+     * @var Emulation
+     */
+    private $emulation;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @param Context $context
+     * @param JsonFactory $resultJsonFactory
+     * @param Emulation $emulation
+     * @param StoreManagerInterface $storeManager
+     */
     public function __construct(
         Context $context,
-        JsonFactory $resultJsonFactory
+        JsonFactory $resultJsonFactory,
+        Emulation $emulation,
+        StoreManagerInterface $storeManager
     )
     {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->emulation = $emulation;
+        $this->storeManager = $storeManager;
     }
 
     public function execute()
@@ -34,6 +57,12 @@ class DataExtractor extends \Magento\Backend\App\Action
             $_type = ucfirst($data['type']);
             $export = $this->_objectManager->create('\Magefan\ShopifyBlogExport\Model\Export\\'.$_type);
             $preparedData = [];
+
+            $this->emulation->startEnvironmentEmulation(
+                $this->storeManager->getStore()->getId(),
+                Area::AREA_FRONTEND,
+                true
+            );
 
             switch ($data['entity']) {
                 case 'category':
@@ -87,6 +116,8 @@ class DataExtractor extends \Magento\Backend\App\Action
                     }
                     break;
             }
+
+            $this->emulation->stopEnvironmentEmulation();
 
             $resultJson = $this->resultJsonFactory->create();
             return $resultJson->setData($preparedData);
