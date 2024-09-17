@@ -168,8 +168,8 @@ class Mirasvit extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
             }
 
             $data['tags'] = $postTags;
-            $data['content'] = $this->filterProvider->getPageFilter()->filter($data['content']);
-            $data['short_content'] = $this->filterProvider->getPageFilter()->filter($data['short_content']);
+            $data['content'] = $this->filterProvider->getPageFilter()->filter((string)$data['content']);
+            $data['short_content'] = $this->filterProvider->getPageFilter()->filter((string)$data['short_content']);
             $answer[] = $data;
         }
 

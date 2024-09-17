@@ -95,8 +95,8 @@ class Magefan extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
             }
 
             $result[$key]['tags'] = $postTags;
-            $result[$key]['content'] = $this->filterProvider->getPageFilter()->filter($result[$key]['content']);
-            $result[$key]['short_content'] = $this->filterProvider->getPageFilter()->filter($result[$key]['short_content']);
+            $result[$key]['content'] = $this->filterProvider->getPageFilter()->filter((string)$result[$key]['content']);
+            $result[$key]['short_content'] = $this->filterProvider->getPageFilter()->filter((string)$result[$key]['short_content']);
         }
 
 
