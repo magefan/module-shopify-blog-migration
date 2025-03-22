@@ -184,10 +184,14 @@ class Magefan extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
         if (!empty($result)) {
             foreach ($result as $key => $item) {
                 $elems = explode('/', $item['featured_img']);
+                $mediaFolder = count($elems) > 1 ? $elems[count($elems) - 2] : null;
+                if ('magefan_blog' == $mediaFolder) {
+                    $mediaFolder = '/' . $mediaFolder;
+                }
+
                 $featuredImg = end($elems);
 
-                $mediaPath = $this->findFullMediaPaths->execute(['featured_img' => $featuredImg])[0] ?? 0;
-
+                $mediaPath = $this->findFullMediaPaths->execute(['featured_img' => $featuredImg], $mediaFolder)[0] ?? 0;
                 if ($mediaPath) {
                     $result[$key]['featured_img'] = $mediaPath;
                 }
