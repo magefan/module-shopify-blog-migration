@@ -97,10 +97,37 @@ class Magefan extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
             $result[$key]['tags'] = $postTags;
             $result[$key]['content'] = $this->filterProvider->getPageFilter()->filter((string)$result[$key]['content']);
             $result[$key]['short_content'] = $this->filterProvider->getPageFilter()->filter((string)$result[$key]['short_content']);
+
+            $result[$key]['content'] = $this->addDomainToImages((string)$result[$key]['content']);
+            $result[$key]['short_content'] = $this->addDomainToImages((string)$result[$key]['short_content']);
+
         }
 
 
         return $this->mvColumns($result, ['post_id' => 'old_id', 'mf_exclude_xml_sitemap' => 'exclude_xml_sitemap']);
+    }
+
+    public function addDomainToImages($html)
+    {
+
+        if (!$html) {
+            return '';
+        }
+
+        return preg_replace_callback(
+            '/<img\s+[^>]*src=["\']([^"\']+)["\']/i',
+            function ($matches) {
+                $src = $matches[1];
+
+                if (!empty($src) && !parse_url($src, PHP_URL_HOST)) {
+                    $newSrc = rtrim($this->storeManager->getStore()->getBaseUrl(), '/') . '/' . ltrim($src, '/');
+                    return str_replace($src, $newSrc, $matches[0]);
+                }
+
+                return $matches[0];
+            },
+            $html
+        );
     }
 
     public function getPostIds(): array
@@ -184,10 +211,14 @@ class Magefan extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
         if (!empty($result)) {
             foreach ($result as $key => $item) {
                 $elems = explode('/', $item['featured_img']);
+                $mediaFolder = null;
+                if (in_array('magefan_blog', $elems)) {
+                    $mediaFolder = '/magefan_blog';
+                }
+
                 $featuredImg = end($elems);
 
-                $mediaPath = $this->findFullMediaPaths->execute(['featured_img' => $featuredImg])[0] ?? 0;
-
+                $mediaPath = $this->findFullMediaPaths->execute(['featured_img' => $featuredImg], $mediaFolder)[0] ?? 0;
                 if ($mediaPath) {
                     $result[$key]['featured_img'] = $mediaPath;
                 }
