@@ -150,7 +150,7 @@
                                         dataExtractorUrl = setGetParameters(dataExtractorUrl, {'offset': offset});
                                         runRequests();
                                     },
-                                    error: function () {
+                                    error: function (xhr, status, errorThrown) {
                                         if (entities[entityIndex] == 'media_post')
                                         {
                                             if (maxWidth >= width) {
@@ -162,7 +162,10 @@
                                             runRequests()
                                         }
                                         else {
-                                            alert('Wrong Import Key');
+                                            alert('There was error while pushing data request: '
+                                                + ' Status: ' + status
+                                                + ' Error: ' + errorThrown
+                                                + ' Response: ' + xhr.responseText);
                                             window.location.href = indexPageUrl;
                                         }
                                     }
