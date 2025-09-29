@@ -2,16 +2,17 @@
 
 namespace Magefan\ShopifyBlogExport\Model\Export;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Magefan extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
 {
     public function getCategories(int $offset): array
     {
         $connection = $this->getConnection();
-
         $select = $connection->select()
             ->from(
                 ['ce' => $this->resourceConnection->getTableName('magefan_blog_category')])
-            ->order('path ASC')
+            ->order(['path ASC', 'category_id ASC'])
             ->limitPage($offset,self::ENTITIES_PER_PAGE);
 
         try {
@@ -104,7 +105,12 @@ class Magefan extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
         }
 
 
-        return $this->mvColumns($result, ['post_id' => 'old_id', 'mf_exclude_xml_sitemap' => 'exclude_xml_sitemap']);
+        return $this->mvColumns($result,
+            [
+                'post_id' => 'old_id', 'mf_exclude_xml_sitemap' => 'exclude_xml_sitemap',
+                'creation_time' => 'created_at', 'update_time' => 'updated_at',
+            ]
+        );
     }
 
     public function addDomainToImages($html)
@@ -165,7 +171,7 @@ class Magefan extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
             throw new \Exception(__('Magefan Blog Extension not detected.'), 1);
         }
 
-        return $this->mvColumns($result, ['author_id' => 'old_id', 'user_id' => 'old_id']);
+        return $this->mvColumns($result, ['author_id' => 'old_id', 'user_id' => 'old_id', 'creation_time' => 'created_at', 'update_time' => 'updated_at',]);
     }
 
     public function getComments(int $offset): array
@@ -209,19 +215,11 @@ class Magefan extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
         }
 
         if (!empty($result)) {
+            $mediaPath = rtrim($this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
+                ->getAbsolutePath(), '/');
+
             foreach ($result as $key => $item) {
-                $elems = explode('/', $item['featured_img']);
-                $mediaFolder = null;
-                if (in_array('magefan_blog', $elems)) {
-                    $mediaFolder = '/magefan_blog';
-                }
-
-                $featuredImg = end($elems);
-
-                $mediaPath = $this->findFullMediaPaths->execute(['featured_img' => $featuredImg], $mediaFolder)[0] ?? 0;
-                if ($mediaPath) {
-                    $result[$key]['featured_img'] = $mediaPath;
-                }
+                $result[$key]['featured_img'] = $mediaPath . '/' . ltrim($item['featured_img'], '/');
             }
         }
 

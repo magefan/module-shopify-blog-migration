@@ -77,7 +77,7 @@
 
             if (entityIdsMax) {
                 var offset = 1;
-                var step = (1 / entityIdsMax) * 100;
+                var step = (<?= $block->escapeHtml(\Magefan\ShopifyBlogExport\Model\Export\AbstractExport::ENTITIES_PER_PAGE) ?> / entityIdsMax) * 100;
                 var width = step;
                 var maxWidth = step*entityIdsMax;
 
@@ -104,7 +104,8 @@
                                 data: {
                                     'data': JSON.stringify(data),
                                     'shopifyUrl': shopifyUrl,
-                                    'entity': 'closeConnection'
+                                    'entity': 'closeConnection',
+                                    form_key: window.FORM_KEY
                                 },
                                 dataType: 'json',
                                 success: function (data) {
@@ -139,7 +140,7 @@
                                 $.ajax({
                                     url: pushDataToShopify,
                                     type: 'POST',
-                                    data: {'data': JSON.stringify(data), 'shopifyUrl': shopifyUrl, 'entity': entities[entityIndex]},
+                                    data: {'data': JSON.stringify(data), 'shopifyUrl': shopifyUrl, 'entity': entities[entityIndex], form_key: window.FORM_KEY},
                                     dataType: 'json',
                                     success: function (dataa) {
                                         if (maxWidth >= width) {
