@@ -3,9 +3,9 @@
 namespace Magefan\ShopifyBlogExport\Model\Export;
 
 use Magento\Framework\App\ResourceConnection;
-use Magefan\ShopifyBlogExport\Model\FindFullMediaPaths;
 use Magento\Cms\Model\Template\FilterProvider;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Filesystem;
 
 abstract class AbstractExport implements \Magefan\ShopifyBlogExport\Api\DataExtractor
 {
@@ -22,29 +22,29 @@ abstract class AbstractExport implements \Magefan\ShopifyBlogExport\Api\DataExtr
 
     protected $entityTypeAttributes = [];
 
-    protected $findFullMediaPaths;
-
     protected $filterProvider;
 
     protected $storeManager;
 
+    protected $filesystem;
+
     /**
      * @param ResourceConnection $resourceConnection
-     * @param FindFullMediaPaths $findFullMediaPaths
      * @param FilterProvider $filterProvider
      * @param StoreManagerInterface $storeManager
+     * @param Filesystem $filesystem
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        FindFullMediaPaths $findFullMediaPaths,
         FilterProvider $filterProvider,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        Filesystem $filesystem
     )
     {
         $this->resourceConnection = $resourceConnection;
-        $this->findFullMediaPaths = $findFullMediaPaths;
         $this->filterProvider = $filterProvider;
         $this->storeManager = $storeManager;
+        $this->filesystem = $filesystem;
     }
 
     abstract function getCategories(int $offset): array;
