@@ -233,8 +233,11 @@ class Mirasvit extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
         }
 
         if (!empty($answer)) {
+            $mediaPath = rtrim($this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
+                ->getAbsolutePath(), '/');
+
             foreach ($answer as $key => $item) {
-                $answer[$key]['featured_img'] = $this->findFullMediaPaths->execute(['featured_img' => $item['featured_img']])[0];
+                $answer[$key]['featured_img'] = $mediaPath . '/' . ltrim($item['featured_img'], '/');
             }
         }
 

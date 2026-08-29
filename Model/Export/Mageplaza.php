@@ -209,10 +209,11 @@ class Mageplaza extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
         }
 
         if (!empty($result)) {
+            $mediaPath = rtrim($this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA)
+                ->getAbsolutePath(), '/');
+
             foreach ($result as $key => $item) {
-                $featuredImg = explode('/', (string)$item['featured_img']);
-                $featuredImg = array_pop($featuredImg);
-                $result[$key]['featured_img'] = $this->findFullMediaPaths->execute(['featured_img' => $featuredImg])[0];
+                $result[$key]['featured_img'] = $mediaPath . '/' . ltrim($item['featured_img'], '/');
             }
         }
 
