@@ -1,0 +1,88 @@
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+.mfsbe-bi [hidden] {
+    display: none !important;
+}
+
+.mfsbe-bi-card {
+    max-width: 760px;
+    margin-top: 2rem;
+    padding: 2rem 2.4rem;
+    background: #fff;
+    border: 1px solid #d6d6d6;
+    border-radius: 4px;
+}
+
+.mfsbe-bi-card h2 {
+    margin-top: 0;
+    font-size: 2rem;
+}
+
+.mfsbe-bi-shop {
+    margin: 0 0 .8rem;
+    color: #6d6d6d;
+}
+
+.mfsbe-bi-hint {
+    color: #6d6d6d;
+}
+
+.mfsbe-bi-bar {
+    height: 12px;
+    overflow: hidden;
+    background: #e3e3e3;
+    border-radius: 6px;
+}
+
+.mfsbe-bi-bar__fill {
+    width: 0;
+    height: 100%;
+    background: #007bdb;
+    border-radius: 6px;
+    transition: width .3s ease;
+}
+
+.mfsbe-bi-bar--done .mfsbe-bi-bar__fill {
+    background: #79a22e;
+}
+
+.mfsbe-bi-bar--waiting .mfsbe-bi-bar__fill {
+    width: 30% !important;
+    animation: mfsbe-bi-slide 1.2s ease-in-out infinite;
+}
+
+@keyframes mfsbe-bi-slide {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(340%); }
+}
+
+.mfsbe-bi-count {
+    margin: .8rem 0 0;
+    color: #6d6d6d;
+}
+
+.mfsbe-bi .message {
+    margin-top: 1.6rem;
+}
+
+.mfsbe-bi-failed ul {
+    max-height: 240px;
+    overflow: auto;
+    margin: 0;
+    padding: .8rem 1.2rem .8rem 3rem;
+    background: #f8f8f8;
+    border-radius: 4px;
+}
+
+.mfsbe-bi-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-top: 1.6rem;
+}
+
+.mfsbe-bi-actions .mfsbe-bi-cancel {
+    color: #e22626;
+}

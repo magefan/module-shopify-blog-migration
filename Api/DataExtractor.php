@@ -67,7 +67,7 @@ interface DataExtractor
      * @param int|null $offset
      * @return array
      */
-    public function getPostMediaPathsWithOffset(int $offset = null): array;
+    public function getPostMediaPathsWithOffset(?int $offset = null): array;
 
     /**
      * @param int $offset

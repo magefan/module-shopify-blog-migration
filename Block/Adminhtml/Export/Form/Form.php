@@ -8,6 +8,8 @@
 
 namespace Magefan\ShopifyBlogExport\Block\Adminhtml\Export\Form;
 
+use Magefan\ShopifyBlogExport\Block\Adminhtml\Export\BlogImport;
+
 /**
  * Form export form block
  */
@@ -77,6 +79,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         $fieldset->addField(
+            'destination',
+            'select',
+            [
+                'name' => 'destination',
+                'label' => __('Destination'),
+                'title' => __('Destination'),
+                'values' => [
+                    ['value' => '', 'label' => __('Magefan Blog App')],
+                    ['value' => BlogImport::DESTINATION, 'label' => __('Shopify default blog')],
+                ],
+                'disabled' => $isElementDisabled,
+            ]
+        );
+
+        $fieldset->addField(
             'shopify_import_key',
             'text',
             [
@@ -85,7 +102,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Shopify Export Key'),
                 'required' => true,
                 'disabled' => $isElementDisabled,
-                'after_element_html' => '<small>You can find it in your Shopify store admin panel > Apps > Magefan Blog > Configuration > Key..</small>',
+                'after_element_html' => '<small id="export_shopify_import_key_note">You can find it in your Shopify store admin panel > Apps > Magefan Blog > Configuration > Key..</small>',
             ]
         );
 

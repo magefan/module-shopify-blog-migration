@@ -57,7 +57,7 @@ abstract class AbstractExport implements \Magefan\ShopifyBlogExport\Api\DataExtr
     abstract function getCommentIds(): array;
     abstract function getPostMediaPaths(int $offset): array;
     abstract function getPostMediaPathsNumber(): array;
-    abstract function getPostMediaPathsWithOffset(int $offset = null): array;
+    abstract function getPostMediaPathsWithOffset(?int $offset = null): array;
 
     public function getEntityIds(string $tableName, string $columnName, string $cond = ''): array
     {
