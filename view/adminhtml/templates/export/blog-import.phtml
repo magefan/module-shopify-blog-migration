@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © Magefan (support@magefan.com). All rights reserved.
+ * Please visit Magefan.com for license details (https://magefan.com/end-user-license-agreement).
+ */
+
+/** @var \Magefan\ShopifyBlogExport\Block\Adminhtml\Export\BlogImport $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<?php
+if (!isset($escaper)) {
+    /* Compatibility fix for old Magento versions */
+    $escaper = $block;
+}
+?>
+<div class="mfsbe-bi" data-mfsbe-bi-config="<?= $escaper->escapeHtmlAttr($block->getConfigJson()) ?>">
+    <div class="message message-error" data-mfsbe-bi-form-error hidden></div>
+
+    <div class="mfsbe-bi-card" data-mfsbe-bi-progress hidden>
+        <p class="mfsbe-bi-shop" data-mfsbe-bi-shop></p>
+        <h2 data-mfsbe-bi-progress-title></h2>
+        <div class="mfsbe-bi-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-mfsbe-bi-bar>
+            <div class="mfsbe-bi-bar__fill" data-mfsbe-bi-bar-fill></div>
+        </div>
+        <p class="mfsbe-bi-count" data-mfsbe-bi-count></p>
+        <div class="message message-notice" data-mfsbe-bi-note hidden></div>
+        <div class="mfsbe-bi-failed" data-mfsbe-bi-failed hidden>
+            <h3><?= $escaper->escapeHtml(__('Posts that failed')) ?></h3>
+            <ul data-mfsbe-bi-failed-list></ul>
+            <p class="mfsbe-bi-hint" data-mfsbe-bi-failed-more hidden></p>
+        </div>
+        <p class="mfsbe-bi-actions">
+            <button type="button" class="action-secondary" data-mfsbe-bi-resume hidden><span><?= $escaper->escapeHtml(__('Continue export')) ?></span></button>
+            <button type="button" class="action-primary" data-mfsbe-bi-new hidden><span><?= $escaper->escapeHtml(__('Start a new export')) ?></span></button>
+            <button type="button" class="action-link mfsbe-bi-cancel" data-mfsbe-bi-cancel hidden><?= $escaper->escapeHtml(__('Cancel import')) ?></button>
+        </p>
+        <div class="message message-error" data-mfsbe-bi-error hidden></div>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {"[data-mfsbe-bi-config]": {"Magefan_ShopifyBlogExport/js/blog-import": {}}}
+</script>

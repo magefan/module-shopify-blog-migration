@@ -37,7 +37,10 @@ php bin/magento setup:static-content:deploy
 ```
 
 ## Usage
-Navigate to Magento 2 Admin Panel > Shopify Blog > Export
+Navigate to Magento 2 Admin Panel > Content > Shopify Blog > Export and choose the blog extension (Magefan, Mageplaza or Mirasvit). Then select the destination:
+
+* **Magefan Blog App** — to the [Magefan Blog App](https://apps.shopify.com/magefan-blog) for Shopify. Paste the key from Shopify Admin > Apps > Magefan Blog > Configuration.
+* **Shopify default blog** — to the native Shopify blog with the Blog Import app by Magefan. Paste the connection key from the app. Posts (disabled posts are imported as hidden), categories as separate Shopify blogs, tags, authors, images and SEO data are exported. Images stored in `pub/media` are uploaded straight to Shopify, so it also works on stores that are not publicly reachable. Once all posts are sent you can close the page; the import continues in Shopify.
 
 ## Support
 If you have any issues, please [contact us](https://magefan.com/contact)

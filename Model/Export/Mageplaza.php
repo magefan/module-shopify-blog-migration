@@ -188,7 +188,7 @@ class Mageplaza extends \Magefan\ShopifyBlogExport\Model\Export\AbstractExport
         return $this->getPostMediaPathsWithOffset();
     }
 
-    public function getPostMediaPathsWithOffset(int $offset = null): array
+    public function getPostMediaPathsWithOffset(?int $offset = null): array
     {
         $connection = $this->getConnection();
 

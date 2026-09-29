@@ -21,7 +21,7 @@ class FindFullMediaPaths
         $this->directoryList = $directoryList;
     }
 
-    public function execute(array $files, string $subDirectory = null): array {
+    public function execute(array $files, ?string $subDirectory = null): array {
         $it = new \RecursiveDirectoryIterator($this->directoryList->getPath('media') . ($subDirectory ?? ''));
         $pathes  = [];
 
