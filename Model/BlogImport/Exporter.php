@@ -292,6 +292,21 @@ class Exporter
     }
 
     /**
+     * Forget the saved export once its import has ended, so the export form is shown again.
+     *
+     * The import itself is left untouched in Shopify.
+     *
+     * @return void
+     */
+    public function dismiss()
+    {
+        $job = $this->state->getJob();
+        if ($job && !empty($job['finished'])) {
+            $this->state->deleteJob();
+        }
+    }
+
+    /**
      * Send one batch of categories.
      *
      * @param array $connection

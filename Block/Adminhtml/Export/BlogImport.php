@@ -70,7 +70,7 @@ class BlogImport extends Template
         $connection = $this->state->getConnection();
 
         $urls = [];
-        foreach (['connect', 'start', 'send', 'finish', 'status', 'cancel'] as $action) {
+        foreach (['connect', 'start', 'send', 'finish', 'status', 'cancel', 'dismiss'] as $action) {
             $urls[$action] = $this->getUrl('shopifyblogexport/blogimport/' . $action);
         }
 
