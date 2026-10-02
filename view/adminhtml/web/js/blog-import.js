@@ -410,7 +410,22 @@ define(['jquery', 'mage/backend/validation'], function ($) {
             sendAll(config.job);
         });
 
-        el.newExport.addEventListener('click', showForm);
+        el.newExport.addEventListener('click', function () {
+            el.newExport.disabled = true;
+
+            // The ended export is saved on the server; forget it, or a reloaded page shows it again.
+            request('dismiss')
+                .then(function () {
+                    config.job = null;
+                    showForm();
+                })
+                .catch(function (error) {
+                    showError(error.message);
+                })
+                .finally(function () {
+                    el.newExport.disabled = false;
+                });
+        });
 
         el.cancel.addEventListener('click', function () {
             if (!window.confirm(i18n.confirmCancel)) {
